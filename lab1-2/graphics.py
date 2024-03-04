@@ -3,35 +3,34 @@ from math import gamma
 import matplotlib.pyplot as plt
 
 
-def print_graphics(values: list) -> None:
+def print_graphics(N: list) -> None:
     # Normal distribution
     mu_normal = 0.0
     var_normal = 1.0
-    sample_normal = [np.random.normal(mu_normal, var_normal, n) for n in values]
+    sample_normal = [np.random.normal(mu_normal, var_normal, n) for n in N]
 
     # Cauchy distribution
     mu_cauchy = 0.0
     var_cauchy = 1.0
-    sample_cauchy = [mu_cauchy + var_cauchy * np.random.standard_cauchy(n) for n in values]
+    sample_cauchy = [mu_cauchy + var_cauchy * np.random.standard_cauchy(n) for n in N]
 
     # Student's distribution
     t_student = 3.0
-    sample_student = [np.random.standard_t(t_student, n) for n in values]
+    sample_student = [np.random.standard_t(t_student, n) for n in N]
 
     # Poisson distribution
     mu_poisson = 10.0
-    sample_poisson = [np.random.poisson(mu_poisson, n) for n in values]
+    sample_poisson = [np.random.poisson(mu_poisson, n) for n in N]
 
     # Uniform distribution
-
     a_uniform = -np.sqrt(3)
     b_uniform = np.sqrt(3)
-    sample_uniform = [np.random.uniform(a_uniform, b_uniform, n) for n in values]
+    sample_uniform = [np.random.uniform(a_uniform, b_uniform, n) for n in N]
 
     samples = [
         sample_normal,
-        [sample_cauchy[i][(np.abs(sample_cauchy[i]) <= 10)] for i in range(len(values))],  # to avoid outliers
-        [sample_student[i][(np.abs(sample_student[i]) <= 10)] for i in range(len(values))],  # to avoid outliers
+        sample_cauchy,
+        sample_student,
         sample_poisson,
         sample_uniform
     ]
@@ -59,22 +58,26 @@ def print_graphics(values: list) -> None:
 
     densities = [calc_normal, calc_cauchy, calc_student, calc_poisson, calc_uniform]
 
-    names = ['normal', 'cauchy', "student", 'poisson', 'uniform']
+    names = ['normal', 'cauchy', "student's", 'poisson', 'uniform']
 
     bins = [15, 25, 45]
 
     for j in range(len(samples)):
         plt.figure(figsize=(15, 5))
-        plt.suptitle(f'CDF for {names[j]} distribution')
-        for i in range(len(values)):
-            plt.subplot(100 + len(values) * 10 + i + 1)
+        plt.suptitle(f'Cumulative distribution function for {names[j]} distribution')
+        for i in range(len(N)):
+            plt.subplot(100 + len(N) * 10 + i + 1)
             x_min = min(samples[j][i])
             x_max = max(samples[j][i])
             x = np.linspace(x_min, x_max, 100)
             y = [densities[j](xi) for xi in x]
             plt.hist(samples[j][i], bins=bins[i], density=True, color='white', edgecolor='black')
             plt.plot(x, y, color='black', linewidth=1)
-            plt.title(f'n = {values[i]}')
+            plt.title(f'n = {N[i]}')
             plt.xlabel('values')
-            plt.ylabel('Density')
+            plt.ylabel('CDF values')
+            plt.yscale('linear')
+            if N[i] > 500 and names[j] == 'cauchy':
+                plt.yscale('log')
+                plt.ylabel('log of CDF values')
         plt.show()
