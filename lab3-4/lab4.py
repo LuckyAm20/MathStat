@@ -70,7 +70,7 @@ axes[3].legend()
 figure.savefig('plots/hists.png')
 
 result_df = pd.DataFrame(data)
-result_df.to_csv('res4/normal.csv', index=False)
+result_df.to_csv('results/normal.csv', index=False)
 result_df
 
 significance = 0.05
@@ -105,5 +105,5 @@ for index, n in enumerate(ns):
     data['dev_max'].append(dev_max)
 
 result_df = pd.DataFrame(data)
-result_df.to_csv('res4/random.csv', index=False)
+result_df.to_csv('results/random.csv', index=False)
 result_df

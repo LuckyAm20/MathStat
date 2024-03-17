@@ -60,7 +60,7 @@ def print_graphics(N: list) -> None:
 
     names = ['normal', 'cauchy', "student's", 'poisson', 'uniform']
 
-    bins = [15, 25, 45]
+    bins = [5, 10, 15]
 
     for j in range(len(samples)):
         plt.figure(figsize=(15, 5))
